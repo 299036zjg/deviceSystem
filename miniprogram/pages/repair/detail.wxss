@@ -1,0 +1,47 @@
+.desc-text {
+  font-size: 27rpx;
+  color: #3c4254;
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+
+.record {
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #eef0f5;
+}
+
+.record:last-child {
+  border-bottom: none;
+}
+
+.record-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10rpx;
+}
+
+.record-title {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #1f2430;
+}
+
+.record-time {
+  font-size: 22rpx;
+  color: #a6acbd;
+}
+
+.record-time-block {
+  margin-top: 8rpx;
+}
+
+.detail-gap {
+  margin-top: 12rpx;
+}
+
+.retry-btn {
+  margin-top: 12rpx;
+  color: #2f6fed;
+  font-weight: 600;
+}

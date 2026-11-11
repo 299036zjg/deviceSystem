@@ -1,0 +1,25 @@
+# 构建产物
+backend/target/
+backend/logs/
+backend/data/
+web/node_modules/
+web/dist/
+
+# 运行时日志与临时文件
+*.log
+backend/app.out.log
+backend/app.err.log
+backend/run.out.log
+backend/run.err.log
+web/vite.out.log
+web/vite.err.log
+
+# IDE / 系统
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db
+
+# 测试产生的临时文件
+backend/scripts/test-images/

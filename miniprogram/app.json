@@ -1,0 +1,23 @@
+{
+  "pages": [
+    "pages/login/login",
+    "pages/index/index",
+    "pages/scan/scan",
+    "pages/repair/list",
+    "pages/repair/create",
+    "pages/repair/detail",
+    "pages/order/list",
+    "pages/order/detail",
+    "pages/profile/profile"
+  ],
+  "window": {
+    "navigationBarTitleText": "设备维修",
+    "navigationBarBackgroundColor": "#2f6fed",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#f5f6fa",
+    "backgroundTextStyle": "dark",
+    "enablePullDownRefresh": false
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

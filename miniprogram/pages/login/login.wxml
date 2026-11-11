@@ -1,0 +1,46 @@
+<view class="login-page">
+  <view class="login-head">
+    <view class="login-logo">🔧</view>
+    <view class="login-title">设备维修保养系统</view>
+    <view class="login-subtitle">微信小程序端 · 故障报修与维修处理</view>
+  </view>
+
+  <view class="login-card">
+    <view class="field">
+      <view class="field-label">账号</view>
+      <input
+        class="input"
+        placeholder="请输入账号"
+        placeholder-class="input-placeholder"
+        value="{{account}}"
+        maxlength="64"
+        bindinput="onAccountInput"
+      />
+    </view>
+
+    <view class="field">
+      <view class="field-label">密码</view>
+      <input
+        class="input"
+        password="{{true}}"
+        placeholder="请输入密码"
+        placeholder-class="input-placeholder"
+        value="{{password}}"
+        maxlength="64"
+        confirm-type="done"
+        bindinput="onPasswordInput"
+        bindconfirm="onSubmit"
+      />
+    </view>
+
+    <button
+      class="btn btn-primary btn-block login-btn"
+      loading="{{submitting}}"
+      disabled="{{submitting}}"
+      bindtap="onSubmit"
+    >登 录</button>
+
+    <view class="login-hint">本系统不提供自助注册与微信一键登录，账号由管理员在 Web 后台开通。</view>
+    <view class="login-demo">课程演示账号：rep1 / rep12345（报修人）、tech1 / tech123（维修人员）</view>
+  </view>
+</view>

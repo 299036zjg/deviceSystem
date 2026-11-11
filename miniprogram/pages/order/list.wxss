@@ -1,0 +1,15 @@
+.retry-btn {
+  margin-top: 12rpx;
+  color: #2f6fed;
+  font-weight: 600;
+}
+
+.sub-text {
+  margin-left: 10rpx;
+}
+
+.empty-sub {
+  margin-top: 10rpx;
+  font-size: 22rpx;
+  color: #a6acbd;
+}

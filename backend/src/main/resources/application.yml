@@ -1,0 +1,71 @@
+server:
+  port: 8081
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+spring:
+  application:
+    name: equipment-maintenance-system
+  datasource:
+    url: jdbc:mysql://localhost:3306/sems?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&useSSL=false&rewriteBatchedStatements=true
+    username: root
+    password: ZJGhxy520.
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+  jpa:
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: Asia/Shanghai
+        format_sql: false
+    show-sql: false
+  sql:
+    init:
+      mode: always
+      encoding: UTF-8
+      schema-locations: classpath:db/schema.sql
+      data-locations: classpath:db/demo-data.sql
+      continue-on-error: false
+  servlet:
+    multipart:
+      max-file-size: 6MB
+      max-request-size: 40MB
+  jackson:
+    time-zone: Asia/Shanghai
+    serialization:
+      write-dates-as-timestamps: false
+      fail-on-empty-beans: false
+
+# 业务配置
+sems:
+  session:
+    # 令牌有效期（分钟），设计文档 5.2：默认 2 小时
+    ttl-minutes: 120
+  storage:
+    # 图片存储根目录（相对项目运行目录），数据库只保存相对路径
+    root: ./data/uploads
+  attachment:
+    max-per-request: 6
+    max-size-bytes: 5242880
+    # 未被单据引用的附件保留小时数，超时由清理任务回收
+    retention-hours: 24
+    cleanup-interval-minutes: 60
+  qrcode:
+    size: 300
+    prefix: 'EQ:'
+
+logging:
+  level:
+    root: INFO
+    com.sems: INFO
+    org.hibernate.SQL: WARN
+  file:
+    name: ./logs/sems.log

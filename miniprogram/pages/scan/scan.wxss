@@ -1,0 +1,65 @@
+.scan-btn {
+  margin-top: 24rpx;
+}
+
+.scan-tip {
+  margin-top: 20rpx;
+}
+
+.scan-link {
+  margin-top: 10rpx;
+  color: #2f6fed;
+  font-weight: 600;
+}
+
+.scan-foot {
+  margin-top: 12rpx;
+}
+
+.manual-row {
+  display: flex;
+  align-items: center;
+}
+
+.manual-input {
+  flex: 1;
+}
+
+.manual-btn {
+  flex: 0 0 150rpx;
+  margin-left: 16rpx;
+  height: 88rpx;
+  line-height: 88rpx;
+  font-size: 28rpx;
+  border-radius: 12rpx;
+}
+
+.scan-msg {
+  margin-top: 16rpx;
+}
+
+.scan-btn-row {
+  margin-top: 24rpx;
+}
+
+.related-item {
+  position: relative;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #eef0f5;
+}
+
+.related-item:last-child {
+  border-bottom: none;
+}
+
+.related-action {
+  position: absolute;
+  right: 0;
+  bottom: 20rpx;
+  font-size: 24rpx;
+  color: #2f6fed;
+}
+
+.input-placeholder {
+  color: #a6acbd;
+}

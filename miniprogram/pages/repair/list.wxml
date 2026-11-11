@@ -1,0 +1,55 @@
+<view class="page">
+  <!-- 状态筛选（GET /dictionaries 的 requestStatuses） -->
+  <view class="tabs">
+    <view
+      class="tab {{index === activeIndex ? 'tab-active' : ''}}"
+      wx:for="{{tabs}}"
+      wx:key="code"
+      data-index="{{index}}"
+      bindtap="onTabChange"
+    >{{item.label}}</view>
+  </view>
+
+  <view wx:if="{{loading && !list.length}}" class="loading-more">加载中…</view>
+
+  <view wx:elif="{{error && !list.length}}" class="error-box" bindtap="onRetry">
+    {{error}}
+    <view class="retry-btn">点击重试</view>
+  </view>
+
+  <block wx:elif="{{list.length}}">
+    <view
+      class="list-item"
+      wx:for="{{list}}"
+      wx:key="requestId"
+      data-id="{{item.requestId}}"
+      bindtap="goDetail"
+    >
+      <view class="list-item-head">
+        <text class="list-item-title">{{item.requestNo}}</text>
+        <text class="tag {{item.statusClass}}">{{item.status}}</text>
+      </view>
+      <view class="list-item-sub">{{item.equipmentName}}（{{item.equipmentCode}}） · {{item.location}}</view>
+      <view class="list-item-desc">{{item.description}}</view>
+      <view class="list-item-foot">
+        <view class="foot-left">
+          <text class="tag {{item.urgencyClass}}">{{item.urgency || '一般'}}</text>
+          <text class="foot-time">发现 {{item.discoveredAtText}}</text>
+        </view>
+        <text wx:if="{{item.ownerName}}">处理人：{{item.ownerName}}</text>
+        <text wx:else>{{item.photoCount}} 张照片</text>
+      </view>
+    </view>
+
+    <view class="loading-more" wx:if="{{loading}}">加载更多…</view>
+    <view class="no-more" wx:elif="{{!hasMore}}">没有更多了</view>
+  </block>
+
+  <view wx:else class="empty">
+    <text class="empty-icon">📭</text>
+    <text>暂无报修记录</text>
+    <view class="empty-sub">可在首页点击「扫码报修」提交新的故障报修</view>
+  </view>
+
+  <view class="error-box" wx:if="{{error && list.length}}" bindtap="onRetry">{{error}}（点击重试）</view>
+</view>

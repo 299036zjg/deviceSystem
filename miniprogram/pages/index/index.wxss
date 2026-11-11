@@ -1,0 +1,99 @@
+.hero {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 36rpx 32rpx;
+  border-radius: 20rpx;
+  background: linear-gradient(135deg, #2f6fed 0%, #5b93f7 100%);
+  color: #ffffff;
+  margin-bottom: 24rpx;
+  box-shadow: 0 10rpx 28rpx rgba(47, 111, 237, 0.25);
+}
+
+.hero-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.hero-name {
+  font-size: 38rpx;
+  font-weight: 600;
+}
+
+.hero-sub {
+  font-size: 24rpx;
+  opacity: 0.9;
+  margin-top: 8rpx;
+}
+
+.hero-account {
+  font-size: 22rpx;
+  opacity: 0.8;
+  margin-top: 6rpx;
+}
+
+.hero-action {
+  padding: 10rpx 26rpx;
+  border-radius: 100rpx;
+  background: rgba(255, 255, 255, 0.22);
+  font-size: 24rpx;
+}
+
+.stat-grid {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.stat {
+  flex: 1;
+  min-width: 25%;
+  text-align: center;
+  padding: 16rpx 0;
+}
+
+.stat-value {
+  font-size: 44rpx;
+  font-weight: 600;
+  color: #2f6fed;
+  line-height: 1.2;
+}
+
+.stat-label {
+  font-size: 22rpx;
+  color: #8b93a7;
+  margin-top: 6rpx;
+}
+
+.grid-two {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.entry {
+  width: 48%;
+  background: #ffffff;
+  border-radius: 20rpx;
+  padding: 30rpx 24rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 6rpx 20rpx rgba(47, 111, 237, 0.06);
+}
+
+.entry-icon {
+  font-size: 46rpx;
+  line-height: 1.2;
+}
+
+.entry-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  margin-top: 12rpx;
+  color: #1f2430;
+}
+
+.entry-desc {
+  font-size: 22rpx;
+  color: #8b93a7;
+  margin-top: 6rpx;
+  line-height: 1.5;
+}

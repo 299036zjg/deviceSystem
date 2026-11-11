@@ -1,0 +1,119 @@
+<view class="page">
+  <!-- 扫码 / 手动输入 -->
+  <view class="card">
+    <view class="card-title">
+      <text>{{mode === 'verify' ? '扫码核对设备' : '扫码识别设备'}}</text>
+      <text class="card-extra" wx:if="{{orderId}}">工单 ID：{{orderId}}</text>
+    </view>
+    <view class="hint">对准设备上的二维码扫描；二维码内容格式为 EQ:设备编号。</view>
+
+    <button
+      class="btn btn-primary btn-block scan-btn"
+      loading="{{scanning}}"
+      disabled="{{scanning}}"
+      bindtap="doScan"
+    >📷 扫码识别</button>
+
+    <view class="hint-error scan-tip" wx:if="{{cameraDenied}}">
+      相机权限被拒绝，无法调起扫码。请点击右上角「···」→「设置」开启相机权限，或直接使用下方手动输入设备编号。
+      <view class="scan-link" bindtap="openSetting">去设置开启相机权限</view>
+    </view>
+
+    <view class="divider"></view>
+
+    <view class="field-label">手动输入设备编号</view>
+    <view class="manual-row">
+      <input
+        class="input manual-input"
+        placeholder="例如 SB-001"
+        placeholder-class="input-placeholder"
+        value="{{manualCode}}"
+        maxlength="32"
+        confirm-type="search"
+        bindinput="onManualInput"
+        bindconfirm="doManualQuery"
+      />
+      <button
+        class="btn btn-primary manual-btn"
+        loading="{{lookupLoading}}"
+        disabled="{{lookupLoading}}"
+        bindtap="doManualQuery"
+      >查询</button>
+    </view>
+    <view class="hint scan-foot">扫码不可用时（如相机权限被拒），手动输入同样可以识别设备。</view>
+  </view>
+
+  <view class="hint-error" wx:if="{{error}}">{{error}}</view>
+
+  <!-- 核对结果（维修人员 + 工单上下文） -->
+  <view class="card" wx:if="{{verifyResult}}">
+    <view class="card-title">
+      <text>核对结果</text>
+      <text class="tag {{verifyResult.matched ? 'tag-green' : 'tag-red'}}">{{verifyResult.matched ? '一致' : '不一致'}}</text>
+    </view>
+    <view class="{{verifyResult.matched ? 'hint-success' : 'hint-error'}}">{{verifyResult.message}}</view>
+    <view class="row" wx:if="{{verifyResult.orderEquipment}}">
+      <text class="k">工单设备</text>
+      <text class="v">{{verifyResult.orderEquipment.equipmentCode}} {{verifyResult.orderEquipment.equipmentName}}</text>
+    </view>
+    <view class="row" wx:if="{{verifyResult.scannedEquipment}}">
+      <text class="k">扫描设备</text>
+      <text class="v">{{verifyResult.scannedEquipment.equipmentCode}} {{verifyResult.scannedEquipment.equipmentName}}</text>
+    </view>
+    <view class="btn-row scan-btn-row">
+      <button class="btn btn-primary" bindtap="backToOrder">返回工单</button>
+      <button class="btn btn-ghost" bindtap="doScan">重新扫码</button>
+    </view>
+  </view>
+
+  <!-- 设备信息 -->
+  <view class="card" wx:if="{{equipment}}">
+    <view class="card-title">
+      <text>设备信息</text>
+      <text class="tag {{canReport ? 'tag-green' : 'tag-orange'}}">{{canReport ? '可报修' : (mode === 'verify' ? '核对设备' : '不可报修')}}</text>
+    </view>
+    <view class="row"><text class="k">设备编号</text><text class="v">{{equipment.equipmentCode}}</text></view>
+    <view class="row"><text class="k">设备名称</text><text class="v">{{equipment.equipmentName}}</text></view>
+    <view class="row"><text class="k">设备分类</text><text class="v">{{equipment.category || '—'}}</text></view>
+    <view class="row"><text class="k">型号</text><text class="v">{{equipment.model || '—'}}</text></view>
+    <view class="row"><text class="k">所属部门</text><text class="v">{{equipment.department}}</text></view>
+    <view class="row"><text class="k">使用位置</text><text class="v">{{equipment.location}}</text></view>
+    <view class="row"><text class="k">设备状态</text><text class="v">{{equipment.enabled ? '启用' : '停用'}}</text></view>
+
+    <view class="{{canReport ? 'hint-success' : 'hint-warn'}} scan-msg" wx:if="{{message}}">{{message}}</view>
+
+    <view class="btn-row scan-btn-row" wx:if="{{canReport}}">
+      <button class="btn btn-primary" bindtap="goCreateRepair">去报修</button>
+    </view>
+    <view class="btn-row scan-btn-row" wx:if="{{!canReport && mode === 'verify' && !orderId}}">
+      <button class="btn btn-ghost" bindtap="goOrderList">去我的工单核对</button>
+    </view>
+  </view>
+
+  <!-- 维修人员：该设备下我的未完成工单 -->
+  <view class="card" wx:if="{{relatedOrders.length}}">
+    <view class="card-title">
+      <text>该设备下我的未完成工单</text>
+      <text class="card-extra">{{relatedOrders.length}} 条</text>
+    </view>
+    <view
+      class="related-item"
+      wx:for="{{relatedOrders}}"
+      wx:key="orderId"
+      data-id="{{item.orderId}}"
+      bindtap="goOrderDetail"
+    >
+      <view class="list-item-head">
+        <text class="list-item-title">{{item.orderNo}}</text>
+        <text class="tag {{item.statusClass}}">{{item.status}}</text>
+      </view>
+      <view class="list-item-sub">{{item.typeLabel}} · {{item.equipmentName}}（{{item.equipmentCode}}）</view>
+      <view class="related-action">去处理 ›</view>
+    </view>
+  </view>
+
+  <view class="card" wx:if="{{mode === 'verify' && !orderId && equipment && !relatedOrders.length && !verifyResult}}">
+    <view class="card-title">提示</view>
+    <view class="hint">该设备当前没有分配给你的未完成工单。如需核对工单设备，请先在「我的工单」中打开对应工单，再点击工单详情里的「扫码核对」。</view>
+  </view>
+</view>

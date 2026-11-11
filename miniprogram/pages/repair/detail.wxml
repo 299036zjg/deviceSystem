@@ -1,0 +1,109 @@
+<view class="page">
+  <view wx:if="{{loading && !summary}}" class="loading-more">加载中…</view>
+  <view wx:elif="{{error && !summary}}" class="error-box" bindtap="load">{{error}}
+    <view class="retry-btn">点击重试</view>
+  </view>
+
+  <block wx:if="{{summary}}">
+    <!-- 概览 -->
+    <view class="card">
+      <view class="card-title">
+        <text>报修单 {{summary.requestNo}}</text>
+        <text class="tag {{statusClass}}">{{summary.status}}</text>
+      </view>
+      <view class="row"><text class="k">紧急程度</text><text class="v"><text class="tag {{urgencyClass}}">{{summary.urgency || '一般'}}</text></text></view>
+      <view class="row"><text class="k">故障类型</text><text class="v">{{summary.faultType || '—'}}</text></view>
+      <view class="row"><text class="k">发现时间</text><text class="v">{{discoveredAtText}}</text></view>
+      <view class="row"><text class="k">提交时间</text><text class="v">{{submittedAtText}}</text></view>
+      <view class="row"><text class="k">报修来源</text><text class="v">{{summary.sourceLabel || '—'}}</text></view>
+      <view class="row"><text class="k">报修人</text><text class="v">{{summary.reporterName || '—'}}</text></view>
+    </view>
+
+    <!-- 设备信息 -->
+    <view class="card">
+      <view class="card-title">设备信息</view>
+      <view class="row"><text class="k">设备编号</text><text class="v">{{summary.equipmentCode}}</text></view>
+      <view class="row"><text class="k">设备名称</text><text class="v">{{summary.equipmentName}}</text></view>
+      <view class="row"><text class="k">所属部门</text><text class="v">{{summary.department}}</text></view>
+      <view class="row"><text class="k">使用位置</text><text class="v">{{summary.location}}</text></view>
+    </view>
+
+    <!-- 故障描述 -->
+    <view class="card">
+      <view class="card-title">故障描述</view>
+      <view class="desc-text">{{summary.description}}</view>
+    </view>
+
+    <!-- 现场照片 -->
+    <view class="card" wx:if="{{photos.length}}">
+      <view class="card-title">
+        <text>现场照片</text>
+        <text class="card-extra">{{photos.length}} 张 · 点击查看原图</text>
+      </view>
+      <view class="photo-grid">
+        <view class="photo-cell" wx:for="{{photos}}" wx:key="attachmentId" data-index="{{index}}" bindtap="previewPhoto">
+          <image wx:if="{{item.localPath}}" src="{{item.localPath}}" mode="aspectFill" />
+          <view wx:else class="photo-loading">{{item.loadError ? '加载失败' : '加载中'}}</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 驳回原因 -->
+    <view class="card" wx:if="{{decisionReason}}">
+      <view class="card-title">
+        <text>驳回原因</text>
+        <text class="tag tag-red">已驳回</text>
+      </view>
+      <view class="hint-error">{{decisionReason}}</view>
+      <view class="row detail-gap"><text class="k">处理人</text><text class="v">{{decidedByName || '—'}}</text></view>
+      <view class="row"><text class="k">处理时间</text><text class="v">{{decidedAtText}}</text></view>
+    </view>
+
+    <!-- 处理记录 -->
+    <view class="card" wx:if="{{records.length}}">
+      <view class="card-title">
+        <text>处理记录</text>
+        <text class="card-extra">{{records.length}} 条</text>
+      </view>
+      <view class="record" wx:for="{{records}}" wx:key="recordId">
+        <view class="record-head">
+          <text class="record-title">维修人员：{{item.operatorName || '—'}}</text>
+          <text class="record-time">{{item.submittedAtText}}</text>
+        </view>
+        <view class="row row-block" wx:if="{{item.cause}}"><text class="k">故障原因</text><text class="v">{{item.cause}}</text></view>
+        <view class="row row-block" wx:if="{{item.process}}"><text class="k">维修过程</text><text class="v">{{item.process}}</text></view>
+        <view class="row row-block" wx:if="{{item.result}}"><text class="k">处理结果</text><text class="v">{{item.result}}</text></view>
+        <view class="row row-block" wx:if="{{item.replacedParts}}"><text class="k">更换零部件</text><text class="v">{{item.replacedParts}}</text></view>
+      </view>
+    </view>
+
+    <!-- 验收结论 -->
+    <view class="card" wx:if="{{acceptances.length}}">
+      <view class="card-title">验收记录</view>
+      <view class="record" wx:for="{{acceptances}}" wx:key="acceptanceId">
+        <view class="record-head">
+          <text class="record-title">验收人：{{item.inspectorName || '—'}}</text>
+          <text class="tag {{item.result === 'PASS' ? 'tag-green' : 'tag-red'}}">{{item.resultLabel}}</text>
+        </view>
+        <view class="row row-block" wx:if="{{item.opinion}}"><text class="k">验收意见</text><text class="v">{{item.opinion}}</text></view>
+        <view class="record-time record-time-block">{{item.acceptedAtText}}</view>
+      </view>
+      <view class="divider"></view>
+      <view class="row row-block"><text class="k">验收结论</text><text class="v">{{conclusion || '—'}}</text></view>
+    </view>
+
+    <!-- 关联工单 -->
+    <view class="card" wx:if="{{order}}">
+      <view class="card-title">
+        <text>维修工单</text>
+        <text class="tag {{orderStatusClass}}">{{order.status}}</text>
+      </view>
+      <view class="row"><text class="k">工单编号</text><text class="v">{{order.orderNo}}</text></view>
+      <view class="row"><text class="k">工单类型</text><text class="v">{{order.orderTypeLabel || '维修'}}</text></view>
+      <view class="row"><text class="k">维修负责人</text><text class="v">{{order.ownerName || '—'}}</text></view>
+      <view class="row"><text class="k">计划日期</text><text class="v">{{order.plannedDate || '—'}}</text></view>
+    </view>
+  </block>
+
+  <view class="error-box" wx:if="{{error && summary}}" bindtap="load">{{error}}（点击重试）</view>
+</view>

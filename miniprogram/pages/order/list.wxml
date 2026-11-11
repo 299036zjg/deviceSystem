@@ -1,0 +1,55 @@
+<view class="page">
+  <!-- 状态筛选（GET /dictionaries 的 orderStatuses） -->
+  <view class="tabs">
+    <view
+      class="tab {{index === activeIndex ? 'tab-active' : ''}}"
+      wx:for="{{tabs}}"
+      wx:key="code"
+      data-index="{{index}}"
+      bindtap="onTabChange"
+    >{{item.label}}</view>
+  </view>
+
+  <view wx:if="{{loading && !list.length}}" class="loading-more">加载中…</view>
+
+  <view wx:elif="{{error && !list.length}}" class="error-box" bindtap="onRetry">
+    {{error}}
+    <view class="retry-btn">点击重试</view>
+  </view>
+
+  <block wx:elif="{{list.length}}">
+    <view
+      class="list-item"
+      wx:for="{{list}}"
+      wx:key="orderId"
+      data-id="{{item.orderId}}"
+      bindtap="goDetail"
+    >
+      <view class="list-item-head">
+        <text class="list-item-title">{{item.orderNo}}</text>
+        <text class="tag {{item.statusClass}}">{{item.status}}</text>
+      </view>
+      <view class="list-item-sub">
+        <text class="tag {{item.typeClass}}">{{item.typeLabel}}</text>
+        <text class="sub-text">{{item.equipmentName}}（{{item.equipmentCode}}） · {{item.location}}</text>
+      </view>
+      <view class="list-item-desc">{{item.taskContent}}</view>
+      <view class="list-item-foot">
+        <text>计划 {{item.plannedDateText}}</text>
+        <text wx:if="{{item.costText}}">总费用 {{item.costText}}</text>
+        <text wx:else>{{item.status === '待处理' ? '待开工' : ''}}</text>
+      </view>
+    </view>
+
+    <view class="loading-more" wx:if="{{loading}}">加载更多…</view>
+    <view class="no-more" wx:elif="{{!hasMore}}">没有更多了</view>
+  </block>
+
+  <view wx:else class="empty">
+    <text class="empty-icon">🧰</text>
+    <text>暂无工单任务</text>
+    <view class="empty-sub">报修受理后管理员会派工，工单将显示在这里</view>
+  </view>
+
+  <view class="error-box" wx:if="{{error && list.length}}" bindtap="onRetry">{{error}}（点击重试）</view>
+</view>

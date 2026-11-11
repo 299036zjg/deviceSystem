@@ -1,0 +1,126 @@
+<view class="page page-with-footer">
+  <!-- 故障设备 -->
+  <view class="card">
+    <view class="card-title">
+      <text>故障设备</text>
+      <text class="tag {{canReport ? 'tag-green' : (equipment ? 'tag-orange' : 'tag-gray')}}">{{canReport ? '可报修' : (equipment ? '不可报修' : '未选择')}}</text>
+    </view>
+
+    <block wx:if="{{equipment}}">
+      <view class="row"><text class="k">设备编号</text><text class="v">{{equipment.equipmentCode}}</text></view>
+      <view class="row"><text class="k">设备名称</text><text class="v">{{equipment.equipmentName}}</text></view>
+      <view class="row"><text class="k">所属部门</text><text class="v">{{equipment.department}}</text></view>
+      <view class="row"><text class="k">使用位置</text><text class="v">{{equipment.location}}</text></view>
+    </block>
+    <view wx:else class="hint">尚未选择设备，请扫码或手动输入设备编号。</view>
+
+    <view class="hint-warn" wx:if="{{equipmentMessage && !canReport}}">{{equipmentMessage}}</view>
+
+    <view class="btn-row create-btn-row">
+      <button class="btn btn-primary" loading="{{scanning}}" disabled="{{scanning}}" bindtap="onScanEquipment">扫码选择设备</button>
+      <button class="btn btn-ghost" bindtap="toggleManual">{{manualVisible ? '收起手动输入' : '手动输入编号'}}</button>
+    </view>
+
+    <view class="manual-row create-manual" wx:if="{{manualVisible}}">
+      <input
+        class="input manual-input"
+        placeholder="例如 SB-001"
+        placeholder-class="input-placeholder"
+        value="{{manualCode}}"
+        maxlength="32"
+        confirm-type="search"
+        bindinput="onManualInput"
+        bindconfirm="onManualQuery"
+      />
+      <button
+        class="btn btn-primary manual-btn"
+        loading="{{lookupLoading}}"
+        disabled="{{lookupLoading}}"
+        bindtap="onManualQuery"
+      >查询</button>
+    </view>
+  </view>
+
+  <!-- 报修表单 -->
+  <view class="card">
+    <view class="card-title">故障信息</view>
+
+    <view class="field">
+      <view class="field-label">
+        <text>故障描述<text class="required">*</text></text>
+        <text class="field-hint">{{description.length}}/1000</text>
+      </view>
+      <textarea
+        class="textarea"
+        placeholder="请描述故障现象、发生经过与影响范围（不超过 1000 字）"
+        placeholder-class="input-placeholder"
+        value="{{description}}"
+        maxlength="1000"
+        auto-height
+        bindinput="onDescriptionInput"
+      />
+    </view>
+
+    <view class="field">
+      <view class="field-label">故障类型<text class="required">*</text></view>
+      <picker mode="selector" range="{{faultTypes}}" value="{{faultTypeIndex}}" bindchange="onFaultTypeChange">
+        <view class="picker-value {{faultTypeIndex < 0 ? 'placeholder' : ''}}">{{faultTypeText || '请选择故障类型'}}</view>
+      </picker>
+    </view>
+
+    <view class="field">
+      <view class="field-label">紧急程度<text class="required">*</text></view>
+      <picker mode="selector" range="{{urgencies}}" value="{{urgencyIndex}}" bindchange="onUrgencyChange">
+        <view class="picker-value {{urgencyIndex < 0 ? 'placeholder' : ''}}">{{urgencyText || '请选择紧急程度'}}</view>
+      </picker>
+    </view>
+
+    <view class="field">
+      <view class="field-label">
+        <text>发现时间<text class="required">*</text></text>
+        <text class="field-hint">不可晚于当前时间</text>
+      </view>
+      <view class="datetime-row">
+        <picker class="datetime-picker" mode="date" value="{{discoveredDate}}" end="{{maxDate}}" bindchange="onDateChange">
+          <view class="picker-value">{{discoveredDate}}</view>
+        </picker>
+        <picker class="datetime-picker" mode="time" value="{{discoveredTime}}" bindchange="onTimeChange">
+          <view class="picker-value">{{discoveredTime}}</view>
+        </picker>
+      </view>
+    </view>
+  </view>
+
+  <!-- 现场照片 -->
+  <view class="card">
+    <view class="card-title">
+      <text>现场照片</text>
+      <text class="card-extra">{{photos.length}}/{{maxPhotoCount}}</text>
+    </view>
+    <view class="photo-grid">
+      <view class="photo-cell" wx:for="{{photos}}" wx:key="key">
+        <image src="{{item.tempFilePath}}" mode="aspectFill" data-index="{{index}}" bindtap="previewPhoto" />
+        <view class="photo-close" data-index="{{index}}" catchtap="removePhoto">×</view>
+        <view class="photo-mask" wx:if="{{item.status === 'uploading'}}">上传中 {{item.progress}}%</view>
+        <view class="photo-mask" wx:elif="{{item.status === 'failed'}}" data-index="{{index}}" catchtap="retryPhoto">上传失败，点击重试</view>
+        <view class="photo-mask" wx:elif="{{item.status === 'done'}}">已上传</view>
+      </view>
+      <view class="photo-add" wx:if="{{photos.length < maxPhotoCount}}" bindtap="choosePhoto">
+        <text class="photo-add-icon">＋</text>
+        <text>添加照片</text>
+      </view>
+    </view>
+    <view class="hint" style="margin-top: 16rpx;">最多 6 张，支持拍照与相册，单张不超过 5 MB，格式 JPG/PNG。照片在提交时逐张上传，失败可单张重试。</view>
+  </view>
+
+  <view class="card">
+    <view class="card-title">提交说明</view>
+    <view class="hint">1. 提交后由管理员在 Web 后台受理并指派维修人员。</view>
+    <view class="hint">2. 报修提交后可在「我的报修」查看受理、维修与验收进度。</view>
+    <view class="hint">3. 报修人只能对本部门的启用设备提交报修。</view>
+  </view>
+</view>
+
+<view class="footer-bar">
+  <button class="btn btn-primary" loading="{{submitting}}" disabled="{{submitting}}" bindtap="onSubmit">提交报修</button>
+</view>

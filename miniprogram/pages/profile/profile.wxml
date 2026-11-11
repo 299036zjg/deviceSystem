@@ -1,0 +1,74 @@
+<view class="page">
+  <!-- 密码被管理员重置后的提醒（EM001 2.e） -->
+  <view class="card tip-card" wx:if="{{user.mustChangePassword}}">
+    <view class="tip-title">密码已被管理员重置</view>
+    <view class="tip-text">请先在下方修改本人密码，再继续使用系统；修改成功后需要重新登录。</view>
+  </view>
+
+  <!-- 个人信息 -->
+  <view class="card">
+    <view class="card-title">
+      <text>个人信息</text>
+      <text class="tag {{user.enabled === false ? 'tag-red' : 'tag-blue'}}">{{user.enabled === false ? '已停用' : '正常'}}</text>
+    </view>
+    <view class="row"><text class="k">姓名</text><text class="v">{{user.name || '—'}}</text></view>
+    <view class="row"><text class="k">账号</text><text class="v">{{user.account || '—'}}</text></view>
+    <view class="row"><text class="k">部门</text><text class="v">{{user.department || '—'}}</text></view>
+    <view class="row"><text class="k">角色</text><text class="v">{{user.roleLabel || '—'}}</text></view>
+    <view class="row" wx:if="{{user.expireAt}}"><text class="k">登录有效期至</text><text class="v">{{expireAtText}}</text></view>
+    <view class="hint profile-hint">账号与角色由管理员在 Web 后台维护，如需调整请联系管理员。</view>
+  </view>
+
+  <!-- 修改密码 -->
+  <view class="card">
+    <view class="card-title">修改密码</view>
+    <view class="field">
+      <view class="field-label">原密码<text class="required">*</text></view>
+      <input
+        class="input"
+        password="{{true}}"
+        placeholder="请输入原密码"
+        placeholder-class="input-placeholder"
+        value="{{oldPassword}}"
+        maxlength="64"
+        bindinput="onOldPasswordInput"
+      />
+    </view>
+    <view class="field">
+      <view class="field-label">
+        <text>新密码<text class="required">*</text></text>
+        <text class="field-hint">8~64 位，含字母和数字</text>
+      </view>
+      <input
+        class="input"
+        password="{{true}}"
+        placeholder="请输入新密码"
+        placeholder-class="input-placeholder"
+        value="{{newPassword}}"
+        maxlength="64"
+        bindinput="onNewPasswordInput"
+      />
+    </view>
+    <view class="field">
+      <view class="field-label">确认新密码<text class="required">*</text></view>
+      <input
+        class="input"
+        password="{{true}}"
+        placeholder="请再次输入新密码"
+        placeholder-class="input-placeholder"
+        value="{{confirmPassword}}"
+        maxlength="64"
+        bindinput="onConfirmPasswordInput"
+      />
+    </view>
+    <button
+      class="btn btn-primary btn-block pwd-btn"
+      loading="{{submitting}}"
+      disabled="{{submitting}}"
+      bindtap="onChangePassword"
+    >保存并重新登录</button>
+    <view class="hint profile-hint">修改成功后当前登录状态会失效，需要使用新密码重新登录。</view>
+  </view>
+
+  <button class="btn btn-danger btn-block" bindtap="onLogout">退出登录</button>
+</view>

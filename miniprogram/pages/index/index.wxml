@@ -1,0 +1,73 @@
+<view class="page">
+  <!-- 顶部身份卡 -->
+  <view class="hero">
+    <view class="hero-main">
+      <view class="hero-name">{{user.name || '未登录'}}</view>
+      <view class="hero-sub">{{user.department || ''}}<block wx:if="{{roleLabel}}"> · {{roleLabel}}</block></view>
+      <view class="hero-account">账号：{{user.account || ''}}</view>
+    </view>
+    <view class="hero-action" bindtap="goProfile">我的</view>
+  </view>
+
+  <!-- 首页数字（GET /dashboard，按角色返回） -->
+  <view class="card">
+    <view class="card-title">
+      <text>我的工作台</text>
+      <text class="card-extra" bindtap="loadDashboard">刷新</text>
+    </view>
+
+    <view wx:if="{{loading && !stats.length}}" class="hint">数据加载中…</view>
+    <view wx:elif="{{error}}" class="error-box" catchtap="loadDashboard">{{error}}（点击重试）</view>
+    <block wx:else>
+      <view class="stat-grid" wx:if="{{stats.length}}">
+        <view class="stat" wx:for="{{stats}}" wx:key="key">
+          <view class="stat-value">{{item.value}}</view>
+          <view class="stat-label">{{item.label}}</view>
+        </view>
+      </view>
+      <view wx:if="{{notice}}" class="hint-warn">{{notice}}</view>
+    </block>
+  </view>
+
+  <!-- 报修人入口 -->
+  <view class="grid-two" wx:if="{{isReporter}}">
+    <view class="entry" bindtap="goScan">
+      <view class="entry-icon">📷</view>
+      <view class="entry-title">扫码报修</view>
+      <view class="entry-desc">扫描设备二维码，快速提交故障报修</view>
+    </view>
+    <view class="entry" bindtap="goRepairList">
+      <view class="entry-icon">📋</view>
+      <view class="entry-title">我的报修</view>
+      <view class="entry-desc">查看报修进度与处理结果</view>
+    </view>
+  </view>
+
+  <!-- 维修人员入口 -->
+  <view class="grid-two" wx:if="{{isTechnician}}">
+    <view class="entry" bindtap="goOrderList">
+      <view class="entry-icon">🧰</view>
+      <view class="entry-title">我的工单</view>
+      <view class="entry-desc">处理维修/保养任务并提交完工</view>
+    </view>
+    <view class="entry" bindtap="goVerifyScan">
+      <view class="entry-icon">🔍</view>
+      <view class="entry-title">扫码核对</view>
+      <view class="entry-desc">到场扫描设备二维码核对工单设备</view>
+    </view>
+  </view>
+
+  <!-- 管理员提示 -->
+  <view class="card" wx:if="{{isAdmin}}">
+    <view class="card-title">管理员提示</view>
+    <view class="hint">设备台账、派工受理、验收与统计等管理功能请在 Web 管理后台操作。</view>
+    <view class="hint" style="margin-top: 12rpx;">小程序端仅提供故障报修与维修处理。</view>
+  </view>
+
+  <view class="card">
+    <view class="card-title">使用说明</view>
+    <view class="hint">1. 报修人：扫描设备二维码或手动输入设备编号后填写报修单。</view>
+    <view class="hint">2. 维修人员：在我的工单中开工，到场扫码核对设备后填写维修过程并上传完工照片。</view>
+    <view class="hint">3. 工单验收由管理员在 Web 后台完成，退回后可在小程序追加整改并再次提交。</view>
+  </view>
+</view>

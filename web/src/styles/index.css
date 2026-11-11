@@ -1,0 +1,129 @@
+:root {
+  --sems-primary: #2f6fed;
+  --sems-bg: #f4f6fa;
+  --sems-text: #1f2937;
+  --sems-muted: #6b7280;
+  --sems-border: #e5e7eb;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Microsoft YaHei", "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+  color: var(--sems-text);
+  background: var(--sems-bg);
+  font-size: 14px;
+}
+
+.page {
+  padding: 16px 20px 28px;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.page-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.page-subtitle {
+  color: var(--sems-muted);
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  background: #fff;
+  padding: 14px 16px;
+  border-radius: 10px;
+  margin-bottom: 14px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+}
+
+.table-card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 16px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+}
+
+.pager {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px 24px;
+}
+
+.detail-item {
+  display: flex;
+  gap: 8px;
+  line-height: 1.9;
+}
+
+.detail-item .label {
+  color: var(--sems-muted);
+  min-width: 84px;
+}
+
+.section-title {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 18px 0 10px;
+  padding-left: 8px;
+  border-left: 3px solid var(--sems-primary);
+}
+
+.photo-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.muted {
+  color: var(--sems-muted);
+}
+
+.required::before {
+  content: "*";
+  color: #f56c6c;
+  margin-right: 2px;
+}
+
+.timeline-card {
+  background: #fafbfe;
+  border: 1px solid var(--sems-border);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 10px;
+}
+
+.empty-hint {
+  color: var(--sems-muted);
+  padding: 18px 0;
+  text-align: center;
+}

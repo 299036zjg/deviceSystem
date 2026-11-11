@@ -1,0 +1,22 @@
+.retry-btn {
+  margin-top: 12rpx;
+  color: #2f6fed;
+  font-weight: 600;
+}
+
+.foot-left {
+  display: flex;
+  align-items: center;
+}
+
+.foot-time {
+  margin-left: 12rpx;
+  font-size: 22rpx;
+  color: #a6acbd;
+}
+
+.empty-sub {
+  margin-top: 10rpx;
+  font-size: 22rpx;
+  color: #a6acbd;
+}
