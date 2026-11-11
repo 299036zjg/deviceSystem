@@ -13,7 +13,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-
+/**
+ * 登录、退出、个人信息与改密（EM001、EM009）。
+ */
 @Service
 public class AuthService {
 
